@@ -79,8 +79,8 @@ Forgery cost (ReSign) ≈ **40 µs** — about 5× cheaper than an honest signat
 
 ## Authors
 
-- **Chanmi Park** — Sungshin Women's University
-- **Joohee Lee** (corresponding author) — jooheelee@sungshin.ac.kr
+- **Chanmi Park** — Sungshin Women's University — parkchanmi801@gmail.com
+- **Joohee Lee** (corresponding author)
 
 ## License
 
