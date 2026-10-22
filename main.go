@@ -6,6 +6,8 @@ import (
 	"fmt"
 )
 
+// main runs experiments E1–E4 on one sample commit and prints signature/key sizes.
+// Threat model M1: the attacker holds the Ed25519 secret key but not the ML-DSA one.
 func main() {
 	c := &Commit{
 		Tree:    "a1b2c3",
@@ -54,7 +56,7 @@ func main() {
 	fmt.Println()
 
 	fmt.Println("=== E3: non-normalizable (forgery is canonical) ===")
-	inForged := hashedInput(sigF.Salt, m)
+	inForged := hashedInput(sigF.Salt, m) // check σ1′ alone with the stdlib verifier
 	fmt.Println("std ed25519.Verify(forged):", ed25519.Verify(pk.Ed, inForged, sigF.S1))
 	fmt.Println("forged sig length         :", len(sigF.S1), "bytes")
 	fmt.Println()
@@ -63,7 +65,7 @@ func main() {
 	bpk, bsk := BoPKeyGen()
 	bs := BoPSign(bsk, m)
 	fmt.Println("BoP honest verify  :", BoPVerify(bpk, m, bs))
-	bsF := ResignBoP(bsk.a, bs)
+	bsF := ResignBoP(bsk.a, bs) // same M1 attack: Schnorr secret only, σ2 reused
 	fmt.Println("BoP re-sign verify :", BoPVerify(bpk, m, bsF), " -> rejected, OR-SUF restored")
 	fmt.Println()
 

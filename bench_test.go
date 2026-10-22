@@ -8,7 +8,10 @@ import (
 	"github.com/cloudflare/circl/sign/mldsa/mldsa44"
 )
 
+// benchM is the same commit payload the demo signs (see Commit.payload).
 var benchM = []byte("tree a1b2c3\nparent d4e5f6\nauthor Chanmi Park\n\ninitial commit\n")
+
+// ===== Sign / Verify =====
 
 func BenchmarkMLDSASign(b *testing.B) {
 	_, sk, _ := mldsa44.GenerateKey(rand.Reader)
@@ -106,19 +109,20 @@ func BenchmarkConcatKeyGen(b *testing.B) {
 func BenchmarkBoPKeyGen(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		_, _ = BoPKeyGen() // <-- 네 BoP 키생성 함수명으로 맞춰라
+		_, _ = BoPKeyGen() // returns (pub, priv)
 	}
 }
 
-// ===== 공격 비용: 키 손상 재서명 =====
+// ===== Attack cost: key-compromise re-signing (M1) =====
 
+// BenchmarkReSign measures the attacker's cost to forge a second valid concat
+// signature: only the Ed25519 component is recomputed, σ2 is reused as is.
 func BenchmarkReSign(b *testing.B) {
-	pk, sk := ConcatKeyGen()
-	sig := ConcatSign(sk, benchM) // 정직한 서명 1개 (네 서명 함수 시그니처에 맞춰라)
-	_ = pk
+	_, sk := ConcatKeyGen()
+	sig := ConcatSign(sk, benchM) // one honest signature to re-sign
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = ResignConcat(sk.Ed, sig, benchM) // <-- salt 고정 재서명; 네 attack.go 함수명/인자에 맞춰라
+		_ = ResignConcat(sk.Ed, sig, benchM) // salt fixed, Ed25519 re-signed, σ2 reused
 	}
 }
