@@ -1,3 +1,6 @@
+// Research-only commit model: this serializer is deliberately simpler than Git.
+// It illustrates the placement of signature bytes inside the hashed object
+// while keeping them outside the payload passed to the signature algorithm.
 package main
 
 import (

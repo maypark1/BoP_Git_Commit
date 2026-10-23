@@ -30,7 +30,9 @@ type BoPSig struct {
 // randScalar returns a uniformly random scalar mod ℓ.
 func randScalar() *edwards25519.Scalar {
 	b := make([]byte, 64)
-	rand.Read(b)
+	if _, err := rand.Read(b); err != nil {
+		panic(err)
+	}
 	s, _ := edwards25519.NewScalar().SetUniformBytes(b)
 	return s
 }
@@ -76,6 +78,9 @@ func BoPSign(sk *BoPPriv, m []byte) *BoPSig {
 
 // BoPVerify recomputes R = rsp·B − c·A and accepts iff σ2 verifies on h1(A, pk_ml, m, R).
 func BoPVerify(pk *BoPPub, m []byte, sig *BoPSig) bool {
+	if pk == nil || pk.A == nil || pk.ML == nil || sig == nil || sig.Rsp == nil || len(sig.S2) != mldsa44.SignatureSize {
+		return false
+	}
 	chl := h2(sig.S2)
 	negChl := edwards25519.NewScalar().Negate(chl)
 	R := new(edwards25519.Point).VarTimeDoubleScalarBaseMult(negChl, pk.A, sig.Rsp)
@@ -91,4 +96,18 @@ func ResignBoP(skID *edwards25519.Scalar, orig *BoPSig) *BoPSig {
 	kp := randScalar()
 	rsp := edwards25519.NewScalar().MultiplyAdd(chl, skID, kp)
 	return &BoPSig{Rsp: rsp, S2: orig.S2}
+}
+
+// ResignBoPM2 is a targeted M2 substitution, not a generic attack algorithm.
+// It recovers the original identification commitment from the original
+// response/challenge, then signs the corresponding message with the exposed
+// ML-DSA key. Replacing the ML-DSA signature changes the derived challenge,
+// so the unchanged identification response reconstructs a different
+// commitment during verification and the substituted pair is rejected.
+func ResignBoPM2(mlPriv *mldsa44.PrivateKey, pk *BoPPub, orig *BoPSig, m []byte) *BoPSig {
+	neg := edwards25519.NewScalar().Negate(h2(orig.S2))
+	R := new(edwards25519.Point).VarTimeDoubleScalarBaseMult(neg, pk.A, orig.Rsp)
+	s2 := make([]byte, mldsa44.SignatureSize)
+	mldsa44.SignTo(mlPriv, h1(pk.A, pk.ML, m, R), nil, true, s2)
+	return &BoPSig{Rsp: orig.Rsp, S2: s2}
 }

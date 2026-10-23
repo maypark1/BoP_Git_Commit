@@ -1,4 +1,4 @@
-﻿package main
+package main
 
 import (
 	"crypto/ed25519"
@@ -58,6 +58,9 @@ func ConcatSign(sk *ConcatPriv, m []byte) *ConcatSig {
 }
 
 func ConcatVerify(pk *ConcatPub, m []byte, sig *ConcatSig) bool {
+	if pk == nil || pk.ML == nil || sig == nil || len(sig.Salt) != saltLen || len(sig.S1) != ed25519.SignatureSize || len(sig.S2) != mldsa44.SignatureSize {
+		return false
+	}
 	in := hashedInput(sig.Salt, m)
 	v1 := ed25519.Verify(pk.Ed, in, sig.S1)
 	v2 := mldsa44.Verify(pk.ML, in, nil, sig.S2)

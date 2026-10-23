@@ -6,6 +6,7 @@ import (
 	"crypto/sha512"
 
 	"filippo.io/edwards25519"
+	"github.com/cloudflare/circl/sign/mldsa/mldsa44"
 )
 
 // re-sign with a FRESH random nonce (standard ed25519 is deterministic → identical sig);
@@ -17,7 +18,9 @@ func resignEd25519(edPriv ed25519.PrivateKey, msg []byte) []byte {
 	A := edPriv.Public().(ed25519.PublicKey)
 
 	randBytes := make([]byte, 64)
-	rand.Read(randBytes)
+	if _, err := rand.Read(randBytes); err != nil {
+		panic(err)
+	}
 	r, _ := edwards25519.NewScalar().SetUniformBytes(randBytes)
 	R := new(edwards25519.Point).ScalarBaseMult(r)
 
@@ -52,5 +55,20 @@ func RecombineConcat(sig1, sig2 *ConcatSig) *ConcatSig {
 		Salt: sig1.Salt,
 		S1:   sig1.S1,
 		S2:   sig2.S2,
+	}
+}
+
+// ResignConcatM2 models exposure of the ML-DSA signing key, while the
+// Ed25519 secret remains unavailable. The salt and Ed25519 signature are
+// copied unchanged; only the ML-DSA signature is regenerated. The CIRCL
+// randomized signing flag is essential for obtaining a distinct signature
+// on the same message (without changing the shared salt).
+func ResignConcatM2(mlPriv *mldsa44.PrivateKey, orig *ConcatSig, m []byte) *ConcatSig {
+	s2 := make([]byte, mldsa44.SignatureSize)
+	mldsa44.SignTo(mlPriv, hashedInput(orig.Salt, m), nil, true, s2)
+	return &ConcatSig{
+		Salt: append([]byte(nil), orig.Salt...),
+		S1:   append([]byte(nil), orig.S1...),
+		S2:   s2,
 	}
 }
