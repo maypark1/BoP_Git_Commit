@@ -124,6 +124,9 @@ func TestM2ConcatAndBoP(t *testing.T) {
 	c, m := fixture()
 	pk, sk := ConcatKeyGen()
 	honest := ConcatSign(sk, m)
+	if !ConcatVerify(pk, m, honest) {
+		t.Fatal("honest concat signature invalid")
+	}
 	modified := ResignConcatM2(sk.ML, honest, m)
 	if !bytes.Equal(honest.Salt, modified.Salt) || !bytes.Equal(honest.S1, modified.S1) {
 		t.Fatal("M2 must preserve salt and uncompromised Ed25519 signature")
@@ -136,11 +139,25 @@ func TestM2ConcatAndBoP(t *testing.T) {
 	}
 	bp, bs := BoPKeyGen()
 	originalBoP := BoPSign(bs, m)
+	if !BoPVerify(bp, m, originalBoP) {
+		t.Fatal("honest BoP signature invalid")
+	}
 	candidate := ResignBoPM2(bs.ML, bp, originalBoP, m)
 	if !bytes.Equal(originalBoP.Rsp.Bytes(), candidate.Rsp.Bytes()) {
 		t.Fatal("M2 must preserve the identification response")
 	}
 	if bytes.Equal(originalBoP.S2, candidate.S2) || BoPVerify(bp, m, candidate) {
 		t.Fatal("BoP-2 should reject the tested M2 substitution")
+	}
+}
+
+// A short public key must produce false rather than a panic in ed25519.Verify.
+func TestConcatRejectsMalformedPublicKey(t *testing.T) {
+	_, m := fixture()
+	pk, sk := ConcatKeyGen()
+	sig := ConcatSign(sk, m)
+	pk.Ed = pk.Ed[:10]
+	if ConcatVerify(pk, m, sig) {
+		t.Fatal("accepted malformed public key")
 	}
 }

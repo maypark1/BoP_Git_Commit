@@ -12,6 +12,7 @@ func main() {
 	pk, sk := ConcatKeyGen()
 	honest := ConcatSign(sk, m)
 	modified := ResignConcat(sk.Ed, honest, m)
+	fmt.Println("ML-DSA mode: hedged (randomized); targeted component-substitution experiments")
 	fmt.Println("MODEL: ML-DSA-44 + Ed25519; NOT a complete RFC 9980 OpenPGP implementation")
 	fmt.Println("E1/E2a honest verifies:", ConcatVerify(pk, m, honest))
 	fmt.Println("E1/E2a modified verifies:", ConcatVerify(pk, m, modified))

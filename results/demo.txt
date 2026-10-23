@@ -1,0 +1,22 @@
+﻿ML-DSA mode: hedged (randomized); targeted component-substitution experiments
+MODEL: ML-DSA-44 + Ed25519; NOT a complete RFC 9980 OpenPGP implementation
+E1/E2a honest verifies: true
+E1/E2a modified verifies: true
+E2a unchanged salt: true
+E2a unchanged ML-DSA signature: true
+E2a changed Ed25519 signature: true
+E1 distinct modeled Git hashes: true
+E3 standard Ed25519 verifier accepts modified: true
+E2b one new-message attempt accepted: false
+E4 honest BoP verifies: true
+E4 ID-secret-key attack with fixed ML-DSA accepted: false
+E4 unchanged ML-DSA signature: true
+sizes excluding salt: concat 2484 B, BoP 2452 B
+M2 concat salt unchanged: true
+M2 concat Ed25519 unchanged: true
+M2 concat ML-DSA changed: true
+M2 concat modified verifies: true
+M2 modeled commit hashes differ: true
+M2 BoP-2 ML-DSA changed: true
+M2 BoP-2 substituted signature verifies: false
+NOTE: Targeted attack tests do not constitute a formal OR-SUF proof.

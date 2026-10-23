@@ -1,0 +1,21 @@
+﻿=== RUN   TestE1E2aSamePayloadSaltAndSecureComponent
+--- PASS: TestE1E2aSamePayloadSaltAndSecureComponent (0.00s)
+=== RUN   TestE3AlternativeEd25519Signature
+--- PASS: TestE3AlternativeEd25519Signature (0.00s)
+=== RUN   TestE2bAndSaltRecombination
+--- PASS: TestE2bAndSaltRecombination (0.00s)
+=== RUN   TestE4BoPCompromisedIDKey
+--- PASS: TestE4BoPCompromisedIDKey (0.01s)
+=== RUN   TestVerificationRejectsMalformed
+--- PASS: TestVerificationRejectsMalformed (0.00s)
+=== RUN   TestM2ConcatAndBoP
+--- PASS: TestM2ConcatAndBoP (0.00s)
+=== RUN   TestConcatRejectsMalformedPublicKey
+--- PASS: TestConcatRejectsMalformedPublicKey (0.00s)
+=== RUN   TestSignatureSizes
+scheme,component1_bytes,mldsa44_bytes,raw_signature_bytes,salt_bytes
+concat,64,2420,2484,16
+bop2,32,2420,2452,0
+--- PASS: TestSignatureSizes (0.00s)
+PASS
+ok  	bop	(cached)

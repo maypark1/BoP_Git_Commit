@@ -1,0 +1,7 @@
+﻿=== RUN   TestSignatureSizes
+scheme,component1_bytes,mldsa44_bytes,raw_signature_bytes,salt_bytes
+concat,64,2420,2484,16
+bop2,32,2420,2452,0
+--- PASS: TestSignatureSizes (0.01s)
+PASS
+ok  	bop	0.853s

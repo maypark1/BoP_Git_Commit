@@ -1,0 +1,26 @@
+﻿goos: windows
+goarch: amd64
+pkg: bop
+cpu: AMD Ryzen 5 8645HS w/ Radeon 760M Graphics
+BenchmarkMemoryConcatSign-12      	    6109	    226510 ns/op	    3506 B/op	      10 allocs/op
+BenchmarkMemoryConcatSign-12      	    6254	    245090 ns/op	    3506 B/op	      10 allocs/op
+BenchmarkMemoryConcatSign-12      	    4502	    256708 ns/op	    3506 B/op	      10 allocs/op
+BenchmarkMemoryConcatSign-12      	    4490	    225400 ns/op	    3506 B/op	      10 allocs/op
+BenchmarkMemoryConcatSign-12      	    5574	    222566 ns/op	    3506 B/op	      10 allocs/op
+BenchmarkMemoryConcatVerify-12    	   10000	    115115 ns/op	     658 B/op	       6 allocs/op
+BenchmarkMemoryConcatVerify-12    	   10191	    119837 ns/op	     658 B/op	       6 allocs/op
+BenchmarkMemoryConcatVerify-12    	   10000	    119596 ns/op	     658 B/op	       6 allocs/op
+BenchmarkMemoryConcatVerify-12    	   10000	    119911 ns/op	     658 B/op	       6 allocs/op
+BenchmarkMemoryConcatVerify-12    	   10000	    116325 ns/op	     658 B/op	       6 allocs/op
+BenchmarkMemoryBoPSign-12         	    4900	    235123 ns/op	    9538 B/op	      11 allocs/op
+BenchmarkMemoryBoPSign-12         	    6385	    223145 ns/op	    9538 B/op	      11 allocs/op
+BenchmarkMemoryBoPSign-12         	    6148	    225468 ns/op	    9538 B/op	      11 allocs/op
+BenchmarkMemoryBoPSign-12         	    2725	    377819 ns/op	    9538 B/op	      11 allocs/op
+BenchmarkMemoryBoPSign-12         	    5586	    259324 ns/op	    9538 B/op	      11 allocs/op
+BenchmarkMemoryBoPVerify-12       	   10000	    138795 ns/op	     610 B/op	       6 allocs/op
+BenchmarkMemoryBoPVerify-12       	   10000	    135953 ns/op	     610 B/op	       6 allocs/op
+BenchmarkMemoryBoPVerify-12       	    8167	    138628 ns/op	     610 B/op	       6 allocs/op
+BenchmarkMemoryBoPVerify-12       	    9385	    129840 ns/op	     610 B/op	       6 allocs/op
+BenchmarkMemoryBoPVerify-12       	    8270	    149292 ns/op	     610 B/op	       6 allocs/op
+PASS
+ok  	bop	28.269s

@@ -10,8 +10,8 @@ import (
 
 // BoP-2 combiner: a Schnorr component on edwards25519 cyclically bound to ML-DSA-44.
 // ML-DSA signs a digest that includes the Schnorr commitment R, and the Schnorr
-// challenge is derived from the ML-DSA signature, so neither component can be
-// replaced without the other's secret key.
+// challenge is derived from the ML-DSA signature. The tests exercise targeted
+// substitutions; general security depends on the construction assumptions.
 
 type BoPPub struct {
 	A  *edwards25519.Point // Schnorr public key A = a·B
@@ -40,15 +40,19 @@ func randScalar() *edwards25519.Scalar {
 func BoPKeyGen() (*BoPPub, *BoPPriv) {
 	a := randScalar()
 	A := new(edwards25519.Point).ScalarBaseMult(a)
-	mlPub, mlPriv, _ := mldsa44.GenerateKey(rand.Reader)
+	mlPub, mlPriv, err := mldsa44.GenerateKey(rand.Reader)
+	if err != nil {
+		panic(err)
+	}
 	return &BoPPub{A, mlPub}, &BoPPriv{a, A, mlPriv}
 }
 
-// h1 is the message ML-DSA signs: SHA-512(A ‖ pk_ml ‖ m ‖ R).
+// h1 is the message ML-DSA signs: SHA-512(label1 ‖ A ‖ pk_ml ‖ m ‖ R).
 // Binding R here ties σ2 to one specific Schnorr nonce.
 func h1(A *edwards25519.Point, mlPub *mldsa44.PublicKey, m []byte, R *edwards25519.Point) []byte {
 	pk2, _ := mlPub.MarshalBinary()
 	h := sha512.New()
+	h.Write([]byte("bop-git-poc:bop2:h1:v1\x00"))
 	h.Write(A.Bytes())
 	h.Write(pk2)
 	h.Write(m)
@@ -56,9 +60,12 @@ func h1(A *edwards25519.Point, mlPub *mldsa44.PublicKey, m []byte, R *edwards255
 	return h.Sum(nil)
 }
 
-// h2 derives the Schnorr challenge from the ML-DSA signature: c = SHA-512(σ2) mod ℓ.
+// h2 derives the Schnorr challenge from the ML-DSA signature: c = SHA-512(label2 ‖ σ2) mod ℓ.
 func h2(sig2 []byte) *edwards25519.Scalar {
-	d := sha512.Sum512(sig2)
+	h := sha512.New()
+	h.Write([]byte("bop-git-poc:bop2:h2:v1\x00"))
+	h.Write(sig2)
+	d := h.Sum(nil)
 	c, _ := edwards25519.NewScalar().SetUniformBytes(d[:])
 	return c
 }
@@ -70,7 +77,7 @@ func BoPSign(sk *BoPPriv, m []byte) *BoPSig {
 	mlPub := sk.ML.Public().(*mldsa44.PublicKey)
 	mp := h1(sk.A, mlPub, m, R)
 	s2 := make([]byte, mldsa44.SignatureSize)
-	mldsa44.SignTo(sk.ML, mp, nil, false, s2)
+	mldsa44.SignTo(sk.ML, mp, nil, true, s2)
 	chl := h2(s2)
 	rsp := edwards25519.NewScalar().MultiplyAdd(chl, sk.a, k)
 	return &BoPSig{Rsp: rsp, S2: s2}

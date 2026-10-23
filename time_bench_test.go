@@ -18,14 +18,14 @@ func BenchmarkMLDSASign(b *testing.B) {
 	sig := make([]byte, mldsa44.SignatureSize)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		mldsa44.SignTo(sk, benchM, nil, false, sig)
+		mldsa44.SignTo(sk, benchM, nil, true, sig)
 	}
 }
 
 func BenchmarkMLDSAVerify(b *testing.B) {
 	pub, sk, _ := mldsa44.GenerateKey(rand.Reader)
 	sig := make([]byte, mldsa44.SignatureSize)
-	mldsa44.SignTo(sk, benchM, nil, false, sig)
+	mldsa44.SignTo(sk, benchM, nil, true, sig)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		mldsa44.Verify(pub, benchM, nil, sig)

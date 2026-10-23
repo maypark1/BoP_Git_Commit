@@ -1,0 +1,66 @@
+﻿goos: windows
+goarch: amd64
+pkg: bop
+cpu: AMD Ryzen 5 8645HS w/ Radeon 760M Graphics
+BenchmarkMLDSASign-12        	    6567	    165561 ns/op
+BenchmarkMLDSASign-12        	    7530	    162301 ns/op
+BenchmarkMLDSASign-12        	    8205	    208381 ns/op
+BenchmarkMLDSASign-12        	    7435	    245571 ns/op
+BenchmarkMLDSASign-12        	    6538	    184702 ns/op
+BenchmarkMLDSAVerify-12      	   48727	     23567 ns/op
+BenchmarkMLDSAVerify-12      	   52389	     23508 ns/op
+BenchmarkMLDSAVerify-12      	   51374	     24214 ns/op
+BenchmarkMLDSAVerify-12      	   48669	     24840 ns/op
+BenchmarkMLDSAVerify-12      	   46048	     24147 ns/op
+BenchmarkConcatSign-12       	    6319	    201262 ns/op
+BenchmarkConcatSign-12       	    6805	    211219 ns/op
+BenchmarkConcatSign-12       	    5890	    205460 ns/op
+BenchmarkConcatSign-12       	    6478	    214863 ns/op
+BenchmarkConcatSign-12       	    5802	    222510 ns/op
+BenchmarkConcatVerify-12     	   10000	    116959 ns/op
+BenchmarkConcatVerify-12     	    9746	    111306 ns/op
+BenchmarkConcatVerify-12     	   10000	    116535 ns/op
+BenchmarkConcatVerify-12     	   10000	    116313 ns/op
+BenchmarkConcatVerify-12     	   10000	    119789 ns/op
+BenchmarkBoPSign-12          	    5329	    240185 ns/op
+BenchmarkBoPSign-12          	    5944	    221254 ns/op
+BenchmarkBoPSign-12          	    5240	    239199 ns/op
+BenchmarkBoPSign-12          	    4240	    249641 ns/op
+BenchmarkBoPSign-12          	    5268	    239520 ns/op
+BenchmarkBoPVerify-12        	    7824	    134547 ns/op
+BenchmarkBoPVerify-12        	   10000	    147117 ns/op
+BenchmarkBoPVerify-12        	   10000	    128409 ns/op
+BenchmarkBoPVerify-12        	   10000	    147002 ns/op
+BenchmarkBoPVerify-12        	   10000	    145894 ns/op
+BenchmarkEd25519Sign-12      	   28900	     40030 ns/op
+BenchmarkEd25519Sign-12      	   30406	     54041 ns/op
+BenchmarkEd25519Sign-12      	   23827	     47116 ns/op
+BenchmarkEd25519Sign-12      	   33646	     39504 ns/op
+BenchmarkEd25519Sign-12      	   32284	     41530 ns/op
+BenchmarkEd25519Verify-12    	   13466	     91399 ns/op
+BenchmarkEd25519Verify-12    	   13592	     88578 ns/op
+BenchmarkEd25519Verify-12    	   13404	     92082 ns/op
+BenchmarkEd25519Verify-12    	   12141	     92932 ns/op
+BenchmarkEd25519Verify-12    	   13186	     91748 ns/op
+BenchmarkMLDSAKeyGen-12      	   14678	     88546 ns/op	   55328 B/op	       3 allocs/op
+BenchmarkMLDSAKeyGen-12      	   13785	     75203 ns/op	   55328 B/op	       3 allocs/op
+BenchmarkMLDSAKeyGen-12      	   13376	     79162 ns/op	   55328 B/op	       3 allocs/op
+BenchmarkMLDSAKeyGen-12      	   14607	     81689 ns/op	   55328 B/op	       3 allocs/op
+BenchmarkMLDSAKeyGen-12      	   15076	     82319 ns/op	   55328 B/op	       3 allocs/op
+BenchmarkEd25519KeyGen-12    	   40336	     33059 ns/op	      96 B/op	       2 allocs/op
+BenchmarkEd25519KeyGen-12    	   37768	     31972 ns/op	      96 B/op	       2 allocs/op
+BenchmarkEd25519KeyGen-12    	   36643	     33250 ns/op	      96 B/op	       2 allocs/op
+BenchmarkEd25519KeyGen-12    	   39204	     34305 ns/op	      96 B/op	       2 allocs/op
+BenchmarkEd25519KeyGen-12    	   36045	     31709 ns/op	      96 B/op	       2 allocs/op
+BenchmarkConcatKeyGen-12     	   10000	    121174 ns/op	   55488 B/op	       7 allocs/op
+BenchmarkConcatKeyGen-12     	   10000	    116686 ns/op	   55488 B/op	       7 allocs/op
+BenchmarkConcatKeyGen-12     	   10000	    113463 ns/op	   55488 B/op	       7 allocs/op
+BenchmarkConcatKeyGen-12     	   10000	    123269 ns/op	   55488 B/op	       7 allocs/op
+BenchmarkConcatKeyGen-12     	   10000	    178391 ns/op	   55488 B/op	       7 allocs/op
+BenchmarkBoPKeyGen-12        	   10000	    126260 ns/op	   55560 B/op	       7 allocs/op
+BenchmarkBoPKeyGen-12        	   10000	    108377 ns/op	   55560 B/op	       7 allocs/op
+BenchmarkBoPKeyGen-12        	   10000	    116331 ns/op	   55560 B/op	       7 allocs/op
+BenchmarkBoPKeyGen-12        	   10000	    120534 ns/op	   55560 B/op	       7 allocs/op
+BenchmarkBoPKeyGen-12        	   10000	    113564 ns/op	   55560 B/op	       7 allocs/op
+PASS
+ok  	bop	92.703s

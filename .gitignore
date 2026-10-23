@@ -1,0 +1,21 @@
+# Go build and test artifacts
+*.exe
+*.exe~
+*.test
+*.out
+coverage.*
+/bin/
+/dist/
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
